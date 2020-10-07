@@ -261,7 +261,7 @@ class GameServer extends Game {
             this.broadcastLeaderboard();
 
             if (config.isServer)
-            if (this.playerCount() == 0){
+            if (this.playerCount == 0){
                 GameServer.zombies = 0
                 GameServer.zbuildings = 0;
                 GameServer.bots = [];
