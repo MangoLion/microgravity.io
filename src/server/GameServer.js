@@ -260,6 +260,7 @@ class GameServer extends Game {
         if (this.updateIndex % 10 === 0) {
             this.broadcastLeaderboard();
 
+            if (config.isServer)
             if (this.playerCount() == 0){
                 GameServer.zombies = 0
                 GameServer.zbuildings = 0;
