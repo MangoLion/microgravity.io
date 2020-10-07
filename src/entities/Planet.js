@@ -73,7 +73,7 @@ class Planet extends Entity {
                 this.game.zbuildings++
 
                 
-                console.log("CREATING BUILDING")
+                //console.log("CREATING BUILDING")
                 var index = 1//structures.structures.length-1//structures.structureIndexForId['launch-pad'];
                 //console.log("INDEX " + structures.structures[index].id)
                 
