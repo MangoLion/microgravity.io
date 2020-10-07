@@ -261,9 +261,9 @@ class GameServer extends Game {
             this.broadcastLeaderboard();
 
             if (this.playerCount() == 0){
-                this.zombies = 0
-                this.zbuildings = 0;
-                this.bots = [];
+                GameServer.zombies = 0
+                GameServer.zbuildings = 0;
+                GameServer.bots = [];
                 for (let entityId in this.entities) {
                     let entity = this.entities[entityId];
                     if (!entity.isPlanet && !entity.isAsteroid) 
