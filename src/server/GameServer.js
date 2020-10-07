@@ -259,12 +259,10 @@ class GameServer extends Game {
         // Broadcast leaderboards
         if (this.updateIndex % 10 === 0) {
             this.broadcastLeaderboard();
-            let players = 0;
-            for (let entityId in this.entities) {
-                let entity = this.entities[entityId];
-                if (entity.isPlayer && entity.clientHandle) players++;
-            }
-            if (players == 0){
+
+            if (this.playerCount == 0){
+                this.zombies = 0
+                this.zbuildings = 0;
                 this.bots = [];
                 for (let entityId in this.entities) {
                     let entity = this.entities[entityId];
