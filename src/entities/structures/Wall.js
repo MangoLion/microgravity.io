@@ -35,6 +35,7 @@ class Wall extends Structure {
 
     update(dt) {
         if (config.isServer) {
+            this.justEvaluated = false;
             // Handle on just evaluated
             if (this.justEvaluated) {
                 this.justEvaluated = false;
