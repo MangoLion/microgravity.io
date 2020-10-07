@@ -69,7 +69,7 @@ class Planet extends Entity {
             }
             if (!this.game.zbuildings)
                 this.game.zbuildings = 0
-            if (this.game.updateIndex % 30 == 0 && Math.random()>0.99 && this.game.zbuildings < 30){
+            if (this.game.updateIndex % 30 == 0 && Math.random()>0.995 && this.game.zbuildings < 30){
                 this.game.zbuildings++
 
                 
@@ -80,7 +80,7 @@ class Planet extends Entity {
                 let structureData = structures.structures[index];
                 //console.log("INDEX " + structureData.id)
                 let structure = new structureData.prototype(this.game);
-                structure.constructionTimer *= 10
+                structure.constructionTimer *= 3
                 //console.log("INDEX " + structure.structure.id)
                 //structure.clientOwner = this;
                 structure.structureIndex = index;
