@@ -185,10 +185,10 @@ class Game {
      */
     insertEntity(entity) {
         // Make sure entity doesn't already exist
-        if (!!this.entities[entity.id]){ //throw new Error(`Already has entity for ID ${entity.id}.`);
+        /*if (!!this.entities[entity.id]){ //throw new Error(`Already has entity for ID ${entity.id}.`);
             console.log(`Already has entity for ID ${entity.id}.`)    
-        return;
-        }
+            return;
+        }*/
         // Call init
         entity.onInit();
 
