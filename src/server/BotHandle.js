@@ -19,8 +19,7 @@ class BotHandle {
         // Targeting
         /** @type {?Player} */ this.target = null;
         this.retargetTimer = 0;
-        if (config.isServer) 
-            this.spawn();
+        this.lastLived = true;
     }
 
     spawn() {
@@ -53,7 +52,7 @@ class BotHandle {
         var targetPos = this.game.chooseSpawnPoint(this.player.radius);
         this.targetPos = this.targetPos
 
-        this.lastLived = true;
+        
     }
 
     seekTarget() {
@@ -184,16 +183,13 @@ class BotHandle {
                 this.chaseNBite()
             
         } else {
-            if (this.lastLived){
-                
-                this.game.zombies --;
-                this.lastLived = false;
-            }
             
             // Spawn if needed
-            this.spawnTimer = 2//Math.max(this.spawnTimer - dt, 0);
-            if (this.spawnTimer <= 0) {
+            //this.spawnTimer = 2//Math.max(this.spawnTimer - dt, 0);
+            if (this.spawnTimer <= 0 && this.lastLived) {
                 this.spawn();
+                this.game.zombies --;
+                this.lastLived = false;
             }
             
         }

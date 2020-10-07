@@ -154,7 +154,7 @@ class GameServer extends Game {
         let mapSize = config.mapSize - totalRadius;
 
         // Attempt to choose point
-        for (let i = 0; infiniteTries || i < 30; i++) {
+        for (let i = 0; infiniteTries || i < 90; i++) {
             // Find a point
             let xPos = (Math.random() - 0.5) * mapSize;
             let yPos = (Math.random() - 0.5) * mapSize;
