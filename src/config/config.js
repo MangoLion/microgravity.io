@@ -84,7 +84,7 @@ config.maxPlayers = 50;
 config.maxPlayersHard = 60;
 config.playerDeathScoreLoss = 0.10;
 
-config.playerNamePrefixes = [ "Spaceman", "Pilot", "Astronaut", "Cosmonaut", "Rocketeer", "Trooper", "Captain" ];
+config.playerNamePrefixes = ["SURVIVOR", "NOT-A-ZOMBIE"]//[ "Spaceman", "Pilot", "Astronaut", "Cosmonaut", "Rocketeer", "Trooper", "Captain" ];
 config.playerDamagePerVelocity = 1 / 16000;
 config.playerAcceleration = 1500;
 config.playerSprintingAcceleration = 3500;

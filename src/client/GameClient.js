@@ -1613,7 +1613,8 @@ class GameClient extends Game {
             radius = Math.max(radius, this.smallUI ? 1 : 2);
 
             // Set fill style
-            let fillStyle = "white";
+            let fillStyle = "red";
+            if (extraData)
             if (kind === Player.KIND) {
                 let [clientId, allianceId] = extraData;
                 fillStyle = allianceId ? utils.getAllianceColor(allianceId) : "white";

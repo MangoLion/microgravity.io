@@ -114,6 +114,7 @@ if (config.isProd) {
     // Dev server
     let port = 8080;
     app.listen(port, "149.56.14.197", () => console.log(`Listening on port ${port}.`));
+    //app.listen(port,  () => console.log(`Listening on port ${port}.`));
 }
 
 // Handle WebSocket CORS

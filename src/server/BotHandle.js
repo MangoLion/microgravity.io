@@ -19,6 +19,7 @@ class BotHandle {
         // Targeting
         /** @type {?Player} */ this.target = null;
         this.retargetTimer = 0;
+        this.spawn();
     }
 
     spawn() {
@@ -48,6 +49,8 @@ class BotHandle {
         this.targetPos = {x:0,y:0}
         var targetPos = this.game.chooseSpawnPoint(this.player.radius);
         this.targetPos = this.targetPos
+
+        this.lastLived = true;
     }
 
     seekTarget() {
@@ -56,7 +59,7 @@ class BotHandle {
         // Find the closest player within range
         let closestDistance = null;
         let closestPlayer = null;
-        this.game.queryCircle(this.player.x, this.player.y, config.viewDistanceX / 2, entity => {
+        this.game.queryCircle(this.player.x, this.player.y, config.viewDistanceX / 4, entity => {
             // Validate player
             if (!entity.isPlayer || entity.id === this.player.id) return;
 
@@ -92,10 +95,10 @@ class BotHandle {
         let moveDir = -this.player.targetRot;  // Move in a straight line
         if (dist > 300) {
             this.player.moveDir = moveDir;
-            this.player.moveSpeed = 1;
+            this.player.moveSpeed = 0.7;
         } else if (dist < 250) {
             this.player.moveDir = moveDir + Math.PI;
-            this.player.moveSpeed = 1;
+            this.player.moveSpeed = 0.7;
         } else {
             this.player.moveSpeed = 0
         }
@@ -108,18 +111,18 @@ class BotHandle {
             let planet = this.player.overlappingPlanet;
             this.player.targetRot = -Math.atan2(this.player.y - planet.y, this.player.x - planet.x);
             this.player.moveDir = Math.atan2(this.player.y - this.player.overlappingPlanet.y, this.player.x - this.player.overlappingPlanet.x);
-            this.player.moveSpeed = 1;
+            this.player.moveSpeed = 0.4;
         }
     }
 
     chaseNBite(){
         // Turn towards target
         let targetDir = -Math.atan2(this.target.y - this.player.y, this.target.x - this.player.x);
-        this.player.targetRot += utils.turnDir(this.player.targetRot, targetDir) * Math.PI * 0.1;
+        this.player.targetRot += utils.turnDir(this.player.targetRot, targetDir) * Math.PI * 0.4;
 
         // Move towards target
         let dist = utils.dist(this.player.x, this.player.y, this.target.x, this.target.y);
-        let dirDiff = utils.dirDiff(this.player.rot, targetDir);
+        let dirDiff = utils.dirDiff(this.player.rot*3, targetDir);
         let moveDir = -this.player.targetRot;  // Move in a straight line
         this.player.moveDir = moveDir;
         this.player.moveSpeed = 1;
@@ -127,12 +130,12 @@ class BotHandle {
         // Determine if to fire if visible and aiming correctly
         
         // Move away from planet if needed
-        if (this.player.overlappingPlanet) {
+        /*if (this.player.overlappingPlanet) {
             let planet = this.player.overlappingPlanet;
             this.player.targetRot = -Math.atan2(this.player.y - planet.y, this.player.x - planet.x);
             this.player.moveDir = Math.atan2(this.player.y - this.player.overlappingPlanet.y, this.player.x - this.player.overlappingPlanet.x);
             this.player.moveSpeed = 1;
-        }
+        }*/
     }
 
     update(dt) {
@@ -178,11 +181,18 @@ class BotHandle {
                 this.chaseNBite()
             
         } else {
+            if (this.lastLived){
+                
+                this.game.zombies --;
+                this.lastLived = false;
+            }
+            
             // Spawn if needed
-            this.spawnTimer = Math.max(this.spawnTimer - dt, 0);
+            this.spawnTimer = 2//Math.max(this.spawnTimer - dt, 0);
             if (this.spawnTimer <= 0) {
                 this.spawn();
             }
+            
         }
     }
 }

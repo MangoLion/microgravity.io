@@ -415,7 +415,7 @@ class ClientHandle {
 
             // Determine if should add
             let shouldAdd = false;
-            if (entity.isPlayer && entity.clientHandle && (this.isFriendly(entity.clientHandle.id) || this.isAdmin)) shouldAdd = true;  // Friendly player or this is admin
+            if (entity.botHandle||(entity.isPlayer && entity.clientHandle && (this.isFriendly(entity.clientHandle.id) || this.isAdmin))) shouldAdd = true;  // Friendly player or this is admin
             if (entity.isPlanet) shouldAdd = true;  // Show planet
 
             // Add item

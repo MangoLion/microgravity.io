@@ -11,11 +11,11 @@ class Structure extends Entity {
 
     get customText() { return null; }
 
-    get clientOwnerId() { return config.isClient ? this._clientOwnerId : this.clientOwner.id; }
+    get clientOwnerId() { return config.isClient ? this._clientOwnerId : this.clientOwner?this.clientOwner.id : -1; }
     set clientOwnerId(id) { this._clientOwnerId = id; }
-    get ownerAllianceId() { return config.isClient ? this._ownerAllianceId : (this.clientOwner.alliance ? this.clientOwner.alliance.id : null); }
+    get ownerAllianceId() { return config.isClient ? this._ownerAllianceId : (this.clientOwner?(this.clientOwner.alliance ? this.clientOwner.alliance.id : null):-1); }
     set ownerAllianceId(id) { this._ownerAllianceId = id; }
-    get ownerUsername() { return config.isClient ? this._ownerUsername : this.clientOwner.username; }
+    get ownerUsername() { return config.isClient ? this._ownerUsername : this.clientOwner?this.clientOwner.username:-1; }
     set ownerUsername(username) { this._ownerUsername = username; }
 
     get isConstructed() { return this.constructionTimer <= 0; }
@@ -41,7 +41,7 @@ class Structure extends Entity {
         this.hostPlanet = null;
         this.pinAngle = 0;
         this.structureIndex = -1;
-        this.constructionTimer = config.structureConstructionTime;  // Entity has no collisions and no effect until complete
+        this.constructionTimer = config.structureConstructionTime;  // Entity has no collisions and no effect until complete  
         this.spaceStructureCollisions = true;
 
         // Health
@@ -77,7 +77,7 @@ class Structure extends Entity {
 
     onInit() {
         // Update build count
-        if (config.isServer) {
+        if (config.isServer && this.clientOwner) {
             this.clientOwner.structureCounts[this.structure.slotIndex] = (this.clientOwner.structureCounts[this.structure.slotIndex] || 0) + 1;
             this.clientOwner.sendResources();
         }
@@ -123,7 +123,7 @@ class Structure extends Entity {
 
     onDestroy() {
         // Update build count
-        if (config.isServer) {
+        if (config.isServer && this.clientOwner) {
             this.clientOwner.structureCounts[this.structure.slotIndex] = (this.clientOwner.structureCounts[this.structure.slotIndex] || 1) - 1;
             this.clientOwner.sendResources();
         }

@@ -4,6 +4,7 @@ const utils = require("../utils");
 const assets = require("../client/assets");
 const planets = require("../config/planets");
 const settings = require("../client/settings");
+const structures = require("../config/structures");
 
 class Planet extends Entity {
     get bodyRadius() {
@@ -65,6 +66,41 @@ class Planet extends Entity {
             // Increase resources
             for (let i = 0; i < this.resources.length; i++) {
                 this.resources[i] = Math.min(this.resources[i] + this.resourceGenerationRate[i] * dt, this.resourceMax[i]);
+            }
+            if (!this.game.zbuildings)
+                this.game.zbuildings = 0
+            if (this.game.updateIndex % 30 == 0 && Math.random()>0.99 && this.game.zbuildings < 30){
+                this.game.zbuildings++
+
+                
+                //console.log("CREATING BUILDING")
+                var index = 1//structures.structures.length-1//structures.structureIndexForId['launch-pad'];
+                //console.log("INDEX " + structures.structures[index].id)
+                
+                let structureData = structures.structures[index];
+                //console.log("INDEX " + structureData.id)
+                let structure = new structureData.prototype(this.game);
+                structure.constructionTimer *= 10
+                //console.log("INDEX " + structure.structure.id)
+                //structure.clientOwner = this;
+                structure.structureIndex = index;
+                structure.hostPlanet = this;
+                var new_x = this.radius * Math.cos(Math.random()*360 * Math.PI / 180);
+                var new_y = this.radius * Math.sin(Math.random()*360 * Math.PI / 180);
+                var spawnPos = {
+                    x:this.x+new_x,
+                    y:this.y +new_y
+                }
+                var planet = this;
+                var player = spawnPos;
+                // Place on surface
+                let spawnAngle = Math.atan2(player.y - planet.y, player.x - planet.x);
+                let spawnDistance = planet.radius - planet.atmosphereSize;
+                structure.pinAngle = spawnAngle - planet.angle;
+                structure.rot = -spawnAngle + Math.PI / 2;
+                structure.x = planet.x + Math.cos(spawnAngle) * spawnDistance;
+                structure.y = planet.y + Math.sin(spawnAngle) * spawnDistance;
+                this.game.insertEntity(structure);
             }
 
             // Count cities every couple updates

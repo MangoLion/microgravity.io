@@ -74,7 +74,7 @@ structures.structures = [
         price: [200, 1000, 50],
         limit: 1
     },
-
+    
     /* Defenses */
     {
         id: "ied",
@@ -308,6 +308,16 @@ structures.structures.push(...weaponFactoryStructures);
 // List of slots (created by structures)
 structures.slots = [];
 
+structures.structures.push({
+    id: "zombie-pad",
+    slot: "zombie-pad",
+    group: "planet",
+    image: "launch-1",
+    planetItem: true,
+    getPrototype: () => require("../entities/structures/ZombiePad"),
+    price: [200, 1000, 50],
+    limit: 1
+})
 // Add getters
 for (let i = 0; i < structures.structures.length; i++) {
     let structure = structures.structures[i];
@@ -360,6 +370,7 @@ for (let i = 0; i < structures.structures.length; i++) {
         }
     }
 }
+
 
 // Add utility
 structures.structureForId = function(id) {

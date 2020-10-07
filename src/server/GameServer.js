@@ -38,7 +38,7 @@ class GameServer extends Game {
 
         // Add bots
         for (let i = 0; i < config.botCount; i++) {
-            this.bots.push(new BotHandle(this));
+            //this.bots.push(new BotHandle(this));
         }
 
         // Start update loop
