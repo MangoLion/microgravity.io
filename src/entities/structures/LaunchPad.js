@@ -19,8 +19,8 @@ class LaunchPad extends Structure {
             //console.log("CREATING BOT")
             this.game.zombies++;
             var bot = new BotHandle(this.game);
-            bot.x = this.x;
-            bot.y = this.y;
+            bot.spawn_x = this.x;
+            bot.spawn_y = this.y;
             this.game.bots.push(bot);
         }
     }

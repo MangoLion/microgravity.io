@@ -40,7 +40,9 @@ class BotHandle {
             this.player.shipFill = "#32CD32";
         }
         this.player.weaponIndex = weaponIndex;  // Add random weapon
-        [this.player.x, this.player.y] = this.game.chooseSpawnPoint(this.player.radius);
+        //[this.player.x, this.player.y] = this.game.chooseSpawnPoint(this.player.radius);
+        this.player.x = this.spawn_x;
+        this.player.y = this.spawn_y;
         this.game.insertEntity(this.player);
 
         // Reset spawn timer
