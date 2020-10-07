@@ -1603,10 +1603,9 @@ class GameClient extends Game {
         // Draw all of the minimap structures
         let unitMultiplier = 1 / config.mapSize * size;
         for (let item of this.minimapData) {
-            if (extraData)
-                let [kind, id, x, y, radius, extraData] = item;
-            else
-            let [kind, id, x, y, radius] = item;
+            let [kind, id, x, y, radius, extraData] = item;
+            if (item.extraData)
+            extraData = item.extraData;
             if (id === this.spectateId) continue;  // Skip the current player
 
             // Adjust units
