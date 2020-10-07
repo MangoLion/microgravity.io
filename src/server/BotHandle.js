@@ -19,7 +19,8 @@ class BotHandle {
         // Targeting
         /** @type {?Player} */ this.target = null;
         this.retargetTimer = 0;
-        this.spawn();
+        if (config.isServer) 
+            this.spawn();
     }
 
     spawn() {
