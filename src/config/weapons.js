@@ -20,7 +20,7 @@ let weapons = {};
 
 /** @type {WeaponData[]} */
 weapons.weapons = [
-    /* Damage Weapons */
+    /* Damage weapons */
     {
         id: "machine-gun",
         icon: "machine-gun",
@@ -35,6 +35,35 @@ weapons.weapons = [
             let b = new Bullet(shooter.game, "machine-gun");
             b.fireFrom(shooter, t);
             return b;
+        }
+    },
+    {
+        id: "dual-machine-gun",
+        icon: "dual-machine-gun",
+        factoryPrice: [0, 100, 0],
+        bulletResources: [7, 7, 0],
+        generationRate: 2,
+        laborDemand: 40,
+        maxAmmo: 100,
+        fireInterval: 0.15,
+        kickback: 0.06,
+        bulletId: "machine-gun",
+        fire: (shooter, t) => {
+            let angleRange = Math.PI * 0.05;
+            let bulletCount = 2;
+            let bullets = [];
+            for (let i = 0; i < bulletCount; i++) {
+                // Calculate angle offset to give shotgun effect
+                let angleProgress = i / (bulletCount - 1);
+                let angleOffset = angleRange * (angleProgress - 0.5);
+
+                // Fire bullet
+                let b = new Bullet(shooter.game, "machine-gun");
+                b.angleOffset = angleOffset;
+                b.fireFrom(shooter, t);
+                bullets.push(b);
+            }
+            return bullets;
         }
     },
     {
@@ -84,6 +113,23 @@ weapons.weapons = [
         }
     },
     {
+        id: "clusterbomb",
+        icon: "clusterbomb",
+        factoryPrice: [50, 100, 0],
+        bulletResources: [0, 5, 2],
+        generationRate: 2,
+        laborDemand: 60,
+        maxAmmo: 150,
+        fireInterval: 0.35,
+        kickback: 0.04,
+        bulletId: "clusterbomb",
+        fire: (shooter, t) => {
+            let b = new Bullet(shooter.game, "clusterbomb");
+            b.fireFrom(shooter, t);
+            return b;
+        }
+    },
+    {
         id: "bomb",
         icon: "bomb",
         factoryPrice: [50, 100, 0],
@@ -111,6 +157,22 @@ weapons.weapons = [
         bulletId: "missile",
         fire: (shooter, t) => {
             let b = new Bullet(shooter.game, "missile");
+            b.fireFrom(shooter, t);
+            return b;
+        }
+    },
+    {
+        id: "rocket",
+        icon: "rocket",
+        factoryPrice: [150, 250, 100],
+        bulletResources: [4, 5, 5],
+        generationRate: 2,
+        laborDemand: 80,
+        maxAmmo: 120,
+        fireInterval: 0.2,
+        bulletId: "rocket",
+        fire: (shooter, t) => {
+            let b = new Bullet(shooter.game, "rocket");
             b.fireFrom(shooter, t);
             return b;
         }
@@ -271,7 +333,7 @@ weapons.weapons = [
         id: "super-alien-gun",
         icon: "machine-gun",
         dontSell: true,
-        botWeapon: true,
+        //botWeapon: true,
         factoryPrice: [0, 0, 0],
         bulletResources: [0, 0, 0],
         generationRate: 1,

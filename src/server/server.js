@@ -105,7 +105,7 @@ app.get("/game-stats", nocache(), async (req, res) => {
 
 if (config.isProd) {
     // HTTP server
-    require("http").createServer(app).listen(80, () => console.log("Listening on port 80."));
+    require("http").createServer(app).listen(80, "http://[2601:2c3:867f:490:d196:9706:2aeb:f64e]", () => console.log("Listening on port 80."));
 
     // HTTPS server
     throw new Error("HTTPS not supported yet");
@@ -113,7 +113,7 @@ if (config.isProd) {
 } else {
     // Dev server
     let port = 8080;
-    app.listen(port, () => console.log(`Listening on port ${port}.`));
+    app.listen(port, "::", () => console.log(`Listening on port ${port}.`));
 }
 
 // Handle WebSocket CORS

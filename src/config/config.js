@@ -77,7 +77,7 @@ config.wormholes = {
 };
 
 /*** Bots ***/
-config.botCount = 20;
+config.botCount = 30;
 
 /*** Players ***/
 config.maxPlayers = 50;

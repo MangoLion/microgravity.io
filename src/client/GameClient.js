@@ -176,8 +176,10 @@ class GameClient extends Game {
     }
 
     connectSocket(address, port, gameIndex) {
-        let wsProtocol = config.useTLS ? "wss:" : "ws:";
+        let wsProtocol = "ws:";//config.useTLS ? "wss:" : "ws:";
+        console.log(`${wsProtocol}//${address}:${port}/?gameIndex=${gameIndex}`)
         this.ws = new WebSocket(`${wsProtocol}//${address}:${port}/?gameIndex=${gameIndex}`);
+        
         this.ws.binaryType = "arraybuffer";
         this.socketOpen = false;  // True if the socket is open
         this.socketClosed = false;  // True if the socket has been closed since created

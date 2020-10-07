@@ -43,6 +43,20 @@ bullets.bullets = [
         renderType: "circle"
     },
     {
+        id: "clusterbomb",
+        checkCircle: true,
+        radius: 4,
+        bulletSpeed: -250,
+        bulletDrag: 0.4,
+        damage: 0,
+        life: 5,
+        pulseInterval: 0.7,
+        explosionRadius: 25,
+        explosionDamage: 0.3,
+        explosionVelocity: 150,
+        renderType: "circle"
+    },
+    {
         id: "anti-follow",
         checkCircle: true,
         radius: 8,
@@ -53,6 +67,21 @@ bullets.bullets = [
         pulseInterval: 0.3,
         renderType: "circle",
         volume: 0.3
+    },
+    {
+        id: "rocket",
+        // checkCircle: true,
+        radius: 3,
+        trailLength: 35,
+        bulletSpeed: 85,
+        bulletAcceleration: 3000,
+        bulletAccelerationDelay: 0.25,
+        life: 1.3,
+        damage: 0.1,
+        explosionRadius: 35,
+        explosionDamage: 0.2,
+        explosionVelocity: 50,
+        renderType: "triangle"
     },
     {
         id: "missile",

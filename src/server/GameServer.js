@@ -147,6 +147,8 @@ class GameServer extends Game {
         this.insertEntity(asteroid);
     }
 
+    
+
     chooseSpawnPoint(radius = 0, spawnPadding = 5, infiniteTries = false) {
         let totalRadius = radius + spawnPadding;
         let mapSize = config.mapSize - totalRadius;

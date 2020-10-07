@@ -32,11 +32,7 @@ class BotHandle {
         this.player.botHandle = this;
         this.player.username = this.username;
         this.player.shipIndex = config.shipIndexForId("alien");
-        this.player.shipFill = "#FF0000";
-        this.doShoot = Math.random();
-        if (this.doShoot > 0.7){
-            this.player.shipFill = "#32CD32";
-        }
+        this.player.shipFill = "#C2FFDF";
         this.player.weaponIndex = weaponIndex;  // Add random weapon
         [this.player.x, this.player.y] = this.game.chooseSpawnPoint(this.player.radius);
         this.game.insertEntity(this.player);
@@ -70,68 +66,13 @@ class BotHandle {
             }
         });
 
-        //closestPlayer = null;
-
+        closestPlayer = null;
         // Set the target
         this.target = closestPlayer;
         this.retargetTimer = 8;
         this.targetPos = {x:0,y:0}
         if (!this.target){
             [this.targetPos.x, this.targetPos.y] = this.game.chooseSpawnPoint(this.player.radius);
-        }
-    }
-
-    chaseNShoot(){
-        // Turn towards target
-        let targetDir = -Math.atan2(this.target.y - this.player.y, this.target.x - this.player.x);
-        this.player.targetRot += utils.turnDir(this.player.targetRot, targetDir) * Math.PI * 0.1;
-
-        // Move towards target
-        let dist = utils.dist(this.player.x, this.player.y, this.target.x, this.target.y);
-        let dirDiff = utils.dirDiff(this.player.rot, targetDir);
-        let moveDir = -this.player.targetRot;  // Move in a straight line
-        if (dist > 300) {
-            this.player.moveDir = moveDir;
-            this.player.moveSpeed = 1;
-        } else if (dist < 250) {
-            this.player.moveDir = moveDir + Math.PI;
-            this.player.moveSpeed = 1;
-        } else {
-            this.player.moveSpeed = 0
-        }
-
-        // Determine if to fire if visible and aiming correctly
-        this.player.firing = dist < config.viewportHeight * 0.75 && Math.abs(dirDiff) < Math.PI * 0.1;
-
-        // Move away from planet if needed
-        if (this.player.overlappingPlanet) {
-            let planet = this.player.overlappingPlanet;
-            this.player.targetRot = -Math.atan2(this.player.y - planet.y, this.player.x - planet.x);
-            this.player.moveDir = Math.atan2(this.player.y - this.player.overlappingPlanet.y, this.player.x - this.player.overlappingPlanet.x);
-            this.player.moveSpeed = 1;
-        }
-    }
-
-    chaseNBite(){
-        // Turn towards target
-        let targetDir = -Math.atan2(this.target.y - this.player.y, this.target.x - this.player.x);
-        this.player.targetRot += utils.turnDir(this.player.targetRot, targetDir) * Math.PI * 0.1;
-
-        // Move towards target
-        let dist = utils.dist(this.player.x, this.player.y, this.target.x, this.target.y);
-        let dirDiff = utils.dirDiff(this.player.rot, targetDir);
-        let moveDir = -this.player.targetRot;  // Move in a straight line
-        this.player.moveDir = moveDir;
-        this.player.moveSpeed = 1;
-
-        // Determine if to fire if visible and aiming correctly
-        
-        // Move away from planet if needed
-        if (this.player.overlappingPlanet) {
-            let planet = this.player.overlappingPlanet;
-            this.player.targetRot = -Math.atan2(this.player.y - planet.y, this.player.x - planet.x);
-            this.player.moveDir = Math.atan2(this.player.y - this.player.overlappingPlanet.y, this.player.x - this.player.overlappingPlanet.x);
-            this.player.moveSpeed = 1;
         }
     }
 
@@ -172,11 +113,35 @@ class BotHandle {
                 this.player.sprinting = false;*/
                 return;
             }
-            if (this.doShoot > 0.7)
-                this.chaseNShoot();
-            else
-                this.chaseNBite()
-            
+
+            // Turn towards target
+            let targetDir = -Math.atan2(this.target.y - this.player.y, this.target.x - this.player.x);
+            this.player.targetRot += utils.turnDir(this.player.targetRot, targetDir) * Math.PI * 0.1;
+
+            // Move towards target
+            let dist = utils.dist(this.player.x, this.player.y, this.target.x, this.target.y);
+            let dirDiff = utils.dirDiff(this.player.rot, targetDir);
+            let moveDir = -this.player.targetRot;  // Move in a straight line
+            if (dist > 300) {
+                this.player.moveDir = moveDir;
+                this.player.moveSpeed = 1;
+            } else if (dist < 250) {
+                this.player.moveDir = moveDir + Math.PI;
+                this.player.moveSpeed = 1;
+            } else {
+                this.player.moveSpeed = 0
+            }
+
+            // Determine if to fire if visible and aiming correctly
+            this.player.firing = dist < config.viewportHeight * 0.75 && Math.abs(dirDiff) < Math.PI * 0.1;
+
+            // Move away from planet if needed
+            if (this.player.overlappingPlanet) {
+                let planet = this.player.overlappingPlanet;
+                this.player.targetRot = -Math.atan2(this.player.y - planet.y, this.player.x - planet.x);
+                this.player.moveDir = Math.atan2(this.player.y - this.player.overlappingPlanet.y, this.player.x - this.player.overlappingPlanet.x);
+                this.player.moveSpeed = 1;
+            }
         } else {
             // Spawn if needed
             this.spawnTimer = Math.max(this.spawnTimer - dt, 0);

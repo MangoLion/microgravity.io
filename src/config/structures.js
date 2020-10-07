@@ -376,7 +376,7 @@ structures.groupForId = function(id) {
 
 // Default owned structures
 let testingStructures = [ ];
-structures.defaultOwned = [ "city", "oil-mine", "aluminium-mine", "uranium-mine", "minigun-factory", "bomb-factory", "wall", "machine-gun-turret", ...testingStructures ].map(id => structures.structureIndexForId(id));
+structures.defaultOwned = [ "city", "oil-mine", "aluminium-mine", "uranium-mine", "minigun-factory", "bomb-factory", "dual-machine-gun-factory","clusterbomb-factory","rocket-factory","wall", "machine-gun-turret", ...testingStructures ].map(id => structures.structureIndexForId(id));
 
 // Warn if has testing structures
 if (testingStructures.length > 0) {
