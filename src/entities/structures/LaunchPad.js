@@ -15,7 +15,7 @@ class LaunchPad extends Structure {
         super.update(dt);
         if (!this.game.zombies)
             this.game.zombies = 0
-        if (this.game.updateIndex % 30 == 0 && Math.random()>0.9 && this.game.zombies < 100){
+        if (false && this.game.updateIndex % 30 == 0 && Math.random()>0.9 && this.game.zombies < 100){
             //console.log("CREATING BOT")
             this.game.zombies++;
             var bot = new BotHandle(this.game);

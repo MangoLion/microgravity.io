@@ -69,7 +69,7 @@ class Planet extends Entity {
             }
             if (!this.game.zbuildings)
                 this.game.zbuildings = 0
-            if (false && this.game.updateIndex % 30 == 0 && Math.random()>0.995 && this.game.zbuildings < 30){
+            if (this.game.updateIndex % 30 == 0 && Math.random()>0.995 && this.game.zbuildings < 30){
                 this.game.zbuildings++
 
                 
