@@ -259,6 +259,20 @@ class GameServer extends Game {
         // Broadcast leaderboards
         if (this.updateIndex % 10 === 0) {
             this.broadcastLeaderboard();
+            let players = 0;
+            for (let entityId in this.entities) {
+                let entity = this.entities[entityId];
+                if (entity.isPlayer && entity.clientHandle) players++;
+            }
+            if (players == 0){
+                this.bots = [];
+                for (let entityId in this.entities) {
+                    let entity = this.entities[entityId];
+                    if (!entity.isPlanet && !entity.isAsteroid) 
+                        entity.destroy();
+                }
+            }
+
         }
 
         // Broadcast minimap

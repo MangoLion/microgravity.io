@@ -80,7 +80,7 @@ class Planet extends Entity {
                 let structureData = structures.structures[index];
                 //console.log("INDEX " + structureData.id)
                 let structure = new structureData.prototype(this.game);
-                structure.constructionTimer *= 3
+                //structure.constructionTimer *= 3
                 //console.log("INDEX " + structure.structure.id)
                 //structure.clientOwner = this;
                 structure.structureIndex = index;
