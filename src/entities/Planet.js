@@ -74,7 +74,7 @@ class Planet extends Entity {
 
                 
                 //console.log("CREATING BUILDING")
-                var index = 1//structures.structures.length-1//structures.structureIndexForId['launch-pad'];
+                var index = 0//structures.structures.length-1//structures.structureIndexForId['launch-pad'];
                 //console.log("INDEX " + structures.structures[index].id)
                 
                 let structureData = structures.structures[index];

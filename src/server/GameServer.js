@@ -1,6 +1,5 @@
 const Game = require("../Game");
 const ClientHandle = require("./ClientHandle");
-const BotHandle = require("./BotHandle");
 const Asteroid = require("../entities/Asteroid");
 const Planet = require("../entities/Planet");
 const Wormhole = require("../entities/Wormhole");
@@ -9,6 +8,7 @@ const config = require("../config/config");
 const Alliance = require("./Alliance");
 const planetNames = require("../config/planet-names.json");
 const stats = require("./stats");
+//const BotHandle = require("./BotHandle");
 
 /**
  * @callback queryCallback
@@ -152,7 +152,7 @@ class GameServer extends Game {
     chooseSpawnPoint(radius = 0, spawnPadding = 5, infiniteTries = false) {
         let totalRadius = radius + spawnPadding;
         let mapSize = config.mapSize - totalRadius;
-
+        let lastEntity;
         // Attempt to choose point
         for (let i = 0; infiniteTries || i < 90; i++) {
             // Find a point
@@ -172,6 +172,7 @@ class GameServer extends Game {
             let overlaps = false;
             this.queryCircle(xPos, yPos, totalRadius, entity => {
                 overlaps = true;
+                lastEntity= entity;
             });
             if (overlaps) continue;
 
@@ -181,6 +182,7 @@ class GameServer extends Game {
 
         // Failed to find point
         console.trace("Failed to find spawn point.");
+        //console.log(lastEntity)
         return [0, 0];
     }
 

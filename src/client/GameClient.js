@@ -542,10 +542,14 @@ class GameClient extends Game {
         let intervalId = setInterval(() => {
             if (document.getElementById("pleaseDisableAdBlocker")) {
                 this.removeReward("adblock");
-                document.getElementById("moneyMakerSquare").style.border = "6px solid rgb(200, 0, 0)";
+                let square = document.getElementById("moneyMakerSquare")
+                if (square)
+                    square.style.border = "6px solid rgb(200, 0, 0)";
             } else {
                 this.addReward("adblock");
-                document.getElementById("moneyMakerSquare").style.border = "none";
+                let square = document.getElementById("moneyMakerSquare")
+                if (square)
+                    square.style.border = "none";
                 clearInterval(intervalId);
             }
         }, 250);
@@ -2400,8 +2404,9 @@ class GameClient extends Game {
             // Add details
             if (structure.isWorkingStructure) {
                 // Count
-                addDetails("workingStructureCount", `${utils.translate("count")}: ${Math.floor(structure.count)}/${Math.floor(structure.maxCount)}`);
-
+                addDetails("workingStructureCount", `stock: ${Math.floor(structure.count)}/${Math.floor(structure.maxCount)}`);
+                if (structure.vehicle)
+                    addDetails("factoryFielded", `fielded: ${Math.floor(structure.fielded)}/${Math.floor(structure.vehicle.maxFielded)}`);
                 // Labor
                 let percentLaborFulfilled = structure.percentLaborFulfilled;
                 addDetails("workingStructureLabor", `${utils.translate("labor")}: <span class="${percentLaborFulfilled < 0.5 ? "warning" : ""}">${Math.floor(percentLaborFulfilled * 100)}% (${Math.floor(structure.laborDemand * percentLaborFulfilled)}/${structure.laborDemand})</span>`);
@@ -2471,6 +2476,59 @@ class GameClient extends Game {
                     addAction("factoryCollectAll", `${utils.translate("collect-label")} ${utils.translate("all-label")} ${structure.weapon.name}`, () => {
                         this.sendStructureAction(structures.actions.COLLECT, allCount);
                     }, allCount > 0);
+                }else if (structure.customActions){
+                    structure.customActions.forEach(action => {
+                        let canAfford = true;
+                        var i = 0;
+                        action.costs.forEach(cost=>{
+                            if (this.resources[i] < cost)
+                                canAfford = false;
+                            i++;
+                        })
+
+                        addAction(action.name, action.message, () => {
+                            this.sendStructureAction(action.type, action.data);
+                        }, canAfford);
+                    });
+                }else if (structure.isVehicleYard){
+                    // Factory stats
+                    let resourceStats = [];
+                    let produceCount = -1;  // How many can be built before running out of resources
+                    for (let i = 0; i < structure.depositedResources.length; i++) {
+                        let deposited = structure.depositedResources[i];
+                        let bulletResource = structure.vehicle.cost[i];
+
+                        // Determine how many can be built
+                        if (bulletResource !== 0 && (produceCount === -1 || deposited / bulletResource < produceCount)) {
+                            produceCount = deposited / bulletResource;
+                        }
+
+                        // Add the statistic; it's a warning if deposited < sign(bulletResource) so it's only there if
+                        // the factory requires > 1 of that given resource
+                        resourceStats.push(`<span class="${deposited < Math.sign(bulletResource) ? "warning" : ""}">${Math.floor(deposited)}</span> (${bulletResource.toFixed(1)}/unit)`)
+                    }
+                    addDetails("factoryResources", utils.generateResourcesHTML(resourceStats, true, false, i => structure.vehicle.cost[i] > 0));
+                    if (produceCount > 0) {
+                        addDetails("factoryProductCount", utils.translate(produceCount > 1 ? "units-remaining" : "unit-remaining", Math.ceil(produceCount)));
+                    } else {
+                        addDetails("factoryProductCount", utils.translate("out-of-resources"));
+                    }
+                    // Deposit action
+                    let depositDuration = 10;  // Deposit materials for 15 seconds of factory functioning
+                    let depositCounts = [];
+                    let canAfford = true;
+                    for (let i = 0; i < structure.depositedResources.length; i++) {
+                        // The count is either enough to run the factory for 15 seconds or enough for 1 bullet (for things like shields)
+                        let count = structure.costs[i]*1.1;//Math.max(structure.generationRate * structure.costs[i] * depositDuration, structure.costs[i]);
+                        depositCounts.push(count);  // Save the count
+                        if (this.resources[i] < count) canAfford = false;  // Determine if can afford
+                    }
+                    addAction(
+                        "factoryDeposit",
+                        `${utils.translate("deposit-label")}${utils.generateResourcesHTML(depositCounts, false, true)}`,  // Space inserted by icon margin
+                        () => this.sendStructureAction(structures.actions.DEPOSIT, depositCounts),
+                        canAfford
+                    );
                 }
 
                 // Add owner actions

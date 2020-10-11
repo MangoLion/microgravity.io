@@ -29,6 +29,19 @@ bullets.bullets = [
         damage: 0.9
     },
     {
+        id: "tank-shot",
+        checkCircle: true,
+        radius: 7,
+        trailLength: 60,
+        bulletSpeed: 2000,
+        damage: 0.3,
+        pulseInterval: 0.7,
+        explosionRadius: 150,
+        explosionDamage: 0.3,
+        explosionVelocity: 750,
+        renderType: "circle"
+    },
+    {
         id: "bomb",
         checkCircle: true,
         radius: 15,

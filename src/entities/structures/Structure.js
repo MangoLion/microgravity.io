@@ -31,6 +31,7 @@ class Structure extends Entity {
     constructor(game) {
         super(game);
         this.isStructure = true;
+        this.anchor = true;
 
         // Configure entity
         this.checkCollisions = true;
@@ -52,7 +53,8 @@ class Structure extends Entity {
 
     update(dt) {
         // Remove velocity
-        this.setVelocity(0, 0);
+        if (this.anchor)
+            this.setVelocity(0, 0);
 
         if (config.isServer) {
             this.health = Math.min(this.health + this.healthRegenSpeed * dt, this.adjustedMaxHealth);

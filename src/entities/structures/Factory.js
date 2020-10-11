@@ -84,12 +84,12 @@ class Factory extends WorkingStructure {
         this.drawImage(ctx);
 
         // Draw the weapon icon on top of factory
-        let iconY = 66.5;
+        /*let iconY = 66.5;
         let iconSize = 16;
         ctx.save();
         ctx.translate(0, -this.radius + iconY);
         utils.drawImage(ctx, assets.iconUrl(this.weapon.icon), 0, 0, iconSize * 2, iconSize * 2);
-        ctx.restore();
+        ctx.restore();*/
 
         super.postRender(ctx);
     }

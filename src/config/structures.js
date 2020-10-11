@@ -1,4 +1,5 @@
 const weapons = require("./weapons");
+const vehicles = require("./vehicles");
 const resources = require("./resources");
 const utils = require("../utils");
 
@@ -23,7 +24,8 @@ structures.actions = {
     TOGGLE_SHARING: 0,
     DEPOSIT: 1,
     COLLECT: 2,
-    DEMOLISH: 3
+    DEMOLISH: 3,
+    CUSTOM: 4
 };
 
 // Structure groups
@@ -53,6 +55,26 @@ for (let group of structures.groups) {
 
 /** @type {ItemData[]} */
 structures.structures = [
+    {
+        id: "zombie-pad",
+        slot: "zombie-pad",
+        group: "planet",
+        image: "launch-2",
+        planetItem: true,
+        getPrototype: () => require("../entities/structures/ZombiePad"),
+        price: [200, 1000, 50],
+        limit: 1
+    },
+    {
+        id: "vehicle-yard",
+        slot: "vehicle-yard",
+        group: "planet",
+        image: "launch-2",
+        planetItem: true,
+        getPrototype: () => require("../entities/structures/VehicleYard"),
+        price: [4, 4, 4],
+        limit: 10
+    },
     /* Civilian */
     {
         id: "city",
@@ -75,7 +97,78 @@ structures.structures = [
         limit: 1
     },
     
+    {
+        id: "fortified-city",
+        slot: "fortified-city",
+        group: "planet",
+        image: "city-2",
+        planetItem: true,
+        getPrototype: () => require("../entities/structures/FortifiedCity"),
+        price: [300, 300, 0],
+        limit: 50
+    },
+
     /* Defenses */
+    {
+        id: "jet",
+        slot: "jet",
+        group: "planet",
+        image: "jet",
+        planetItem: false,
+        getPrototype: () => require("../entities/structures/Jet"),
+        price: [0, 0, 0],
+        limit: 10000
+    },
+    {
+        id: "heli",
+        slot: "heli",
+        group: "planet",
+        image: "heli",
+        planetItem: false,
+        getPrototype: () => require("../entities/structures/Heli"),
+        price: [0, 0, 0],
+        limit: 10000
+    },
+    {
+        id: "mustang",
+        slot: "mustang",
+        group: "planet",
+        image: "mustang",
+        planetItem: false,
+        getPrototype: () => require("../entities/structures/Mustang"),
+        price: [0, 0, 0],
+        limit: 10000
+    },
+    {
+        id: "jeep",
+        slot: "jeep",
+        group: "planet",
+        image: "jeep",
+        planetItem: false,
+        getPrototype: () => require("../entities/structures/Jeep"),
+        price: [0, 0, 0],
+        limit: 10000
+    },
+    {
+        id: "tank",
+        slot: "tank",
+        group: "planet",
+        image: "tank",
+        planetItem: false,
+        getPrototype: () => require("../entities/structures/Tank"),
+        price: [0, 0, 0],
+        limit: 10000
+    },
+    {
+        id: "insurgent",
+        slot: "insurgent",
+        group: "planet",
+        image: "insurgent",
+        planetItem: false,
+        getPrototype: () => require("../entities/structures/Insurgent"),
+        price: [0, 0, 0],
+        limit: 10000
+    },
     {
         id: "ied",
         slot: "ied",
@@ -305,19 +398,28 @@ for (let i = 0; i < weapons.weapons.length; i++) {
 }
 structures.structures.push(...weaponFactoryStructures);
 
+// Add vehicle structures
+let vehicleFactoryStructures = [];
+for (let i = 0; i < vehicles.vehicles.length; i++) {
+    let vehicle = vehicles.vehicles[i];
+    if (vehicle.maxFielded === -1) continue;  // Don't generate infinite vehicles
+    vehicleFactoryStructures.push({
+        id: `${vehicle.id}-vfactory`,
+        slot: `${vehicle.id}-vfactory`,
+        group: "factory",
+        image: "factory-1",
+        planetItem: true,
+        getPrototype: () => require("../entities/structures/VehicleYard"),
+        price: vehicle.cost,
+        limit: 100,//weapon.id === "nuke" ? 1 : 5,
+        vehicleIndex: i
+    });
+}
+structures.structures.push(...vehicleFactoryStructures);
+
 // List of slots (created by structures)
 structures.slots = [];
 
-structures.structures.push({
-    id: "zombie-pad",
-    slot: "zombie-pad",
-    group: "planet",
-    image: "launch-1",
-    planetItem: true,
-    getPrototype: () => require("../entities/structures/ZombiePad"),
-    price: [200, 1000, 50],
-    limit: 1
-})
 // Add getters
 for (let i = 0; i < structures.structures.length; i++) {
     let structure = structures.structures[i];
@@ -360,7 +462,15 @@ for (let i = 0; i < structures.structures.length; i++) {
                     return utils.translate("structure-factory", weapons.weapons[this.weaponIndex].name);
                 }
             });
-        } else {
+        }else if (structure.id.endsWith("-vfactory")) {
+            // Factory name
+            Object.defineProperty(structure, "name", {
+                get() {
+                    return vehicles.vehicles[this.vehicleIndex].name + " factory"//utils.translate("structure-vfactory", vehicles.vehicles[this.vehicleIndex].name);
+                }
+            });
+        } 
+        else {
             // Generic name
             Object.defineProperty(structure, "name", {
                 get() {
@@ -387,7 +497,9 @@ structures.groupForId = function(id) {
 
 // Default owned structures
 let testingStructures = [ ];
-structures.defaultOwned = [ "city", "oil-mine", "aluminium-mine", "uranium-mine", "minigun-factory", "bomb-factory", "dual-machine-gun-factory","clusterbomb-factory","rocket-factory","wall", "machine-gun-turret", ...testingStructures ].map(id => structures.structureIndexForId(id));
+structures.defaultOwned = [ "city", 
+"heli-vfactory", "jet-vfactory","tank-vfactory","insurgent-vfactory","mustang-vfactory","jeep-vfactory",
+"vehicle-yard","fortified-city","oil-mine", "aluminium-mine", "uranium-mine", "minigun-factory", "bomb-factory", "dual-machine-gun-factory","clusterbomb-factory","rocket-factory","wall", "machine-gun-turret", ...testingStructures ].map(id => structures.structureIndexForId(id));
 
 // Warn if has testing structures
 if (testingStructures.length > 0) {

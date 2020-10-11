@@ -105,7 +105,7 @@ class Bullet extends Entity {
 
             // Set rotation
             aimDir = entity.rot;
-        } else if (entity.isTurret) {
+        } else if (entity.isTurret || entity.isVehicle) {
             // Jump walls
             this.jumpsWalls = true;
 
@@ -117,11 +117,10 @@ class Bullet extends Entity {
             aimDir = entity.aimDir;
         }
         this.rot = aimDir + this.angleOffset;
-
+        
         // Set position
         this.x = entity.x + Math.cos(aimDir) * entity.radius * (fromBack ? -1 : 1);
         this.y = entity.y - Math.sin(aimDir) * entity.radius * (fromBack ? -1 : 1);
-
         // Set velocity
         this.velX = Math.cos(this.rot) * this.bulletSpeed;
         this.velY = -Math.sin(this.rot) * this.bulletSpeed;
@@ -129,6 +128,7 @@ class Bullet extends Entity {
         // Offset velocity by time offset
         this.x += this.velX * timeOffset;
         this.y += this.velY * timeOffset;
+
     }
 
     update(dt) {

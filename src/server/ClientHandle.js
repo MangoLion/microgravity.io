@@ -81,7 +81,7 @@ class ClientHandle {
         /** @type {Alliance} */ this.alliance = null;
 
         /** @type {number} */ this.score = 0;
-        /** @type {number[]} */ this.resources = [200, 200, 200];
+        /** @type {number[]} */ this.resources = [20000, 20000, 20000];
         /** @type {Object.<string, number>} */ this.structureCounts = { };  // Slot indexes mapped to counts
 
         /* @type {number} */ this.notifiedRank = 0;  // Last rank upgrade notification that was sent to the client
@@ -1024,7 +1024,7 @@ class ClientHandle {
             case structures.actions.DEPOSIT:
                 if (!structure.canInteract(this.id)) return;
 
-                if (structure.isFactory) {
+                if (structure.isFactory || structure.isVehicleYard) {
                     // Deposit resources in to factory
                     let resources = data;
                     utils.assertArray(resources, 3);
@@ -1062,6 +1062,10 @@ class ClientHandle {
                 if (!structure.isOwner(this.id)) return;
                 structure.destroy()
 
+                break;
+
+            case structures.actions.CUSTOM:
+                structure.executeAction(action, data);
                 break;
             default:
                 console.warn(`Unknown structure action ${action}`);

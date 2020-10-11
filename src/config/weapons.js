@@ -113,6 +113,24 @@ weapons.weapons = [
         }
     },
     {
+        id: "tank-shot",
+        icon: "tank-shot",
+        dontSell: true,
+        factoryPrice: [0, 0, 0],
+        bulletResources: [0, 0, 0],
+        generationRate: 2,
+        laborDemand: 60,
+        maxAmmo: 150,
+        fireInterval: 0.35,
+        kickback: 0.04,
+        bulletId: "tank-shot",
+        fire: (shooter, t) => {
+            let b = new Bullet(shooter.game, "tank-shot");
+            b.fireFrom(shooter, t);
+            return b;
+        }
+    },
+    {
         id: "clusterbomb",
         icon: "clusterbomb",
         factoryPrice: [50, 100, 0],

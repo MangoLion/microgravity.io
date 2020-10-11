@@ -1,4 +1,5 @@
 const QuadNode = require("quad-node");
+const Spaceship = require("./entities/Spaceship");
 const Player = require("./entities/Player");
 const Asteroid = require("./entities/Asteroid");
 const Bullet = require("./entities/Bullet");
@@ -266,7 +267,7 @@ class Game {
 
 // Set up entity kind map
 let entityPrototypes = [
-    Asteroid, Bullet, Planet, Wormhole, Player
+    Asteroid, Bullet, Planet, Wormhole, Player, Spaceship
 ];
 for (let structure of structures.structures) {
     entityPrototypes.push(structure.getPrototype());
